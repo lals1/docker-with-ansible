@@ -1,0 +1,19 @@
+---
+- name: Destory web, database and load balancing container
+  hosts: docker
+
+  tasks:
+    - name: Destroy database container
+      docker_container:
+        name: redis
+        state: stopped
+
+    - name: Destroy web container
+      docker_container:
+        name: web
+        state: stopped
+
+    - name: Destroy load-balancing container
+      docker_container:
+        state: stopped
+        name: web1
