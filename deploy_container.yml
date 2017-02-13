@@ -1,0 +1,35 @@
+---
+- name: Launch the database container and Build an app with the command module on a remote docker host. Connect the app with database
+  hosts: docker
+
+  tasks:
+    - name: Launch redis database
+      docker_container:
+        name: redis
+        image: redis
+        ports:
+        - "6379:5000"
+
+    - name: build the image
+      command: docker build -t app /root/code/
+
+    - name: run the site in a docker container
+      docker_container:
+        name: web
+        image: "app"
+        state: started
+        ports:
+        - "5000:5000"
+        links:
+        - redis:redis
+
+    - name: Launch another instance of load-balancing container
+      docker_container:
+        state: started
+        name: "web{{ item }}"
+        image: "app"
+        ports:
+        - "5001:5000"
+        links:
+        - redis:redis
+      with_sequence: count=1
