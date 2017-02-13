@@ -18,6 +18,12 @@ Step 2: Check your docker host and verify if containers are launched:
 $ docker ps
 
 Your app should be launched at address http://$DOCKER_HOST_IP:5000
+Check port the load balancer container at http://$DOCKER_HOST_IP:5001
 
 Step 3: Update the app
 
+Copy the new app/code to docker host and build the app again. This build takes less time since it used the previous image template
+
+$ ansible-playbook -u root -k re_deploy_container.yml
+
+Check http://$DOCKER_HOST_IP:5000 for new version of the app. Notice the hits. The app didn't go offline during the update.
