@@ -1,1 +1,1 @@
-# docker-with-ansible
+# Automating docker app deployments using ansible
